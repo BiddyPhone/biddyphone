@@ -3,35 +3,151 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BiddyPhone – Bitcoin for Everyone</title>
+  <title>BiddyPhone | Mining Economic Freedom</title>
   <style>
-    body { font-family: sans-serif; line-height:1.6; margin:2rem; max-width:800px; }
-    header { text-align:center; margin-bottom:2rem; }
-    h1 { font-size:2.5rem; }
-    a.button {
-      display:inline-block; padding:0.8em 1.2em; background:#ffcc00;
-      color:#000; text-decoration:none; border-radius:5px; margin:0.5rem;
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #222;
+      background-color: #fff8f0;
+    }
+    header {
+      background: linear-gradient(to right, #f6d365, #fda085);
+      padding: 3rem 1rem;
+      text-align: center;
+      color: #222;
+    }
+    header h1 {
+      font-size: 2.8rem;
+      margin: 0 0 1rem;
+    }
+    header p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    nav {
+      background-color: #fff0dc;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: #444;
+      font-weight: 600;
+    }
+    section {
+      padding: 2rem 1.5rem;
+      max-width: 960px;
+      margin: auto;
+    }
+    section h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #ff8c00;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    footer {
+      background: #222;
+      color: #eee;
+      text-align: center;
+      padding: 2rem 1rem;
+      margin-top: 2rem;
+    }
+    .btn {
+      display: inline-block;
+      background: #ffb347;
+      color: black;
+      padding: 0.7em 1.5em;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      margin-top: 1rem;
     }
   </style>
 </head>
 <body>
   <header>
     <h1>BiddyPhone</h1>
-    <p>Decentralized Bitcoin Mining, For Everyone</p>
+    <p>Democratizing Bitcoin Mining Through Mobile Infrastructure. Solar-powered, satellite-connected smartphones bringing Bitcoin to the unbanked.</p>
   </header>
 
-  <section>
-    <h2>Download</h2>
-    <a href="biddyphone-whitepaper.html" class="button">📘 Whitepaper</a>
-    <a href="BiddyPhone_Pitch_Deck_Humanitarian.pdf" class="button">🌍 Humanitarian Deck</a>
-    <a href="BiddyPhone_Pitch_Deck_Technical.pdf" class="button">⚙️ Technical Deck</a>
-    <a href="simulator_README.md" class="button">📱 Simulator Docs</a>
+  <nav>
+    <a href="#vision">Vision</a>
+    <a href="#solution">Solution</a>
+    <a href="#tech">Technology</a>
+    <a href="#roadmap">Roadmap</a>
+    <a href="#contact">Join</a>
+  </nav>
+
+  <section id="vision">
+    <h2>The Vision</h2>
+    <p>Over 1.4 billion people remain unbanked. With BiddyPhone, we put financial sovereignty directly into people's hands. No banks, no internet dependency, no middlemen—just a phone, the sun, and Bitcoin.</p>
   </section>
 
-  <section>
-    <h2>Join the Movement</h2>
-    <p>Are you a developer, community organizer, or believer in economic freedom? Join us. We’re building open hardware for the future of money.</p>
-    <a href="mailto:join@biddyphone.org" class="button">📬 Get Involved</a>
+  <section id="solution">
+    <h2>The BiddyPhone Solution</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Low-Power ASIC Mining</h3>
+        <p>Mine Bitcoin directly from your smartphone using our ultra-efficient SHA-256 chip (<1W).</p>
+      </div>
+      <div class="card">
+        <h3>Solar Charging</h3>
+        <p>Each phone is powered by integrated solar panels, designed for tropical use cases.</p>
+      </div>
+      <div class="card">
+        <h3>Offline Connectivity</h3>
+        <p>Stay synced through LoRa mesh and LEO satellites—no need for Wi-Fi or GSM.</p>
+      </div>
+      <div class="card">
+        <h3>Daily UBI</h3>
+        <p>Receive 100 sats/day in universal basic income directly to your wallet.</p>
+      </div>
+    </div>
   </section>
+
+  <section id="tech">
+    <h2>Technical Highlights</h2>
+    <ul>
+      <li>Custom SHA-256 ASIC (28nm, <1W)</li>
+      <li>Flexible solar wrap, 3–5W output</li>
+      <li>LEO satellite module + mesh (LoRa/BLE)</li>
+      <li>Secure BiddyOS (AOSP fork)</li>
+      <li>On-device mining, syncing, and wallet</li>
+    </ul>
+    <a href="biddyphone-whitepaper.html" class="btn">📘 Read the Whitepaper</a>
+  </section>
+
+  <section id="roadmap">
+    <h2>Roadmap</h2>
+    <ul>
+      <li>Q3 2025: Android mining simulator & UI</li>
+      <li>Q1 2026: ASIC prototype development</li>
+      <li>Q3 2026: Pilot launches in Kenya, Philippines, Ghana</li>
+      <li>2027: Global rollout begins</li>
+    </ul>
+  </section>
+
+  <section id="contact">
+    <h2>Get Involved</h2>
+    <p>Are you an engineer, community leader, or crypto believer? We're building something that matters. Help us launch the world's first UBI-powered mining phone.</p>
+    <a href="mailto:join@biddyphone.org" class="btn">📬 Join the Movement</a>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 BiddyPhone. Built for economic freedom.</p>
+  </footer>
 </body>
 </html>
