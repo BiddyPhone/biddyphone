@@ -17,7 +17,6 @@ python biddyphone_video_generator.py
 """
 
 import os
-import sys
 from pathlib import Path
 import numpy as np
 from moviepy import (
@@ -274,19 +273,19 @@ class BiddyPhoneVideoGenerator:
     def apply_effect(self, clip, effect_type):
         """Apply visual effects to clips"""
         if effect_type == 'zoom_in':
-            return clip.resize(lambda t: 1 + 0.02 * t)
+            return clip.fx(vfx.resize, lambda t: 1 + 0.02 * t)
         elif effect_type == 'slide_left':
             return clip.set_position(lambda t: (-100 + 100 * t, 'center'))
         elif effect_type == 'fade_in':
-            return clip.fadein(1).fadeout(1)
+            return clip.fx(vfx.fadein, 1).fx(vfx.fadeout, 1)
         elif effect_type == 'rotate_in':
             return clip.rotate(lambda t: 360 * t / clip.duration)
         elif effect_type == 'scale_up':
-            return clip.resize(lambda t: 0.8 + 0.2 * np.sin(2 * np.pi * t))
+             return clip.fx(vfx.resize, lambda t: 0.8 + 0.2 * np.sin(2 * np.pi * t))
         elif effect_type == 'pulse':
-            return clip.resize(lambda t: 1 + 0.1 * np.sin(4 * np.pi * t))
+                return clip.fx(vfx.resize, lambda t: 1 + 0.1 * np.sin(4 * np.pi * t))
         elif effect_type == 'burst':
-            return clip.resize(lambda t: 1 + 0.5 * (1 - t / clip.duration))
+            return clip.fx(vfx.fadein, 0.5).fx(vfx.fadeout, 0.5)
         else:
             return clip.fadein(0.5).fadeout(0.5)
     
@@ -296,7 +295,7 @@ class BiddyPhoneVideoGenerator:
         
         # Create background
         bg_path = self.create_background_image(scene['background_type'])
-        bg_clip = ImageClip(str(bg_path)).set_duration(scene['duration']).resize(self.video_size)
+        bg_clip = ImageClip(str(bg_path)).set_duration(scene['duration']).fx(vfx.resize, self.video_size)
         bg_clip = self.apply_effect(bg_clip, scene.get('effect', 'fade_in'))
         scene_clips.append(bg_clip)
         
@@ -308,7 +307,7 @@ class BiddyPhoneVideoGenerator:
                 fontsize=80, 
                 color=self.brand_colors['white'],
                 position=('center', 200)
-            ).fadein(0.5)
+            ).fx(vfx.fadein, 0.5)
             scene_clips.append(title_clip)
         
         # Add subtitle text
@@ -319,7 +318,7 @@ class BiddyPhoneVideoGenerator:
                 fontsize=40, 
                 color=self.brand_colors['light'],
                 position=('center', 300)
-            ).fadein(1)
+            ).fx(vfx.fadein, 1)
             scene_clips.append(subtitle_clip)
         
         # Generate and add voiceover
@@ -337,7 +336,7 @@ class BiddyPhoneVideoGenerator:
         """Create animated logo introduction"""
         logo_path = self.create_logo()
         logo_clip = ImageClip(str(logo_path)).set_duration(3).set_position('center')
-        logo_clip = logo_clip.resize(0.5).fadein(1).fadeout(1)
+        logo_clip = logo_clip.fx(vfx.resize, 0.5).fx(vfx.fadein, 1).fx(vfx.fadeout, 1)
         
         # Create background for logo
         bg = ColorClip(size=self.video_size, color=self.brand_colors['dark']).set_duration(3)
@@ -369,7 +368,7 @@ class BiddyPhoneVideoGenerator:
         # Create and add background music
         print("Adding background music...")
         music_path = self.create_background_music(total_duration)
-        bg_music = AudioFileClip(str(music_path)).volumex(0.3)  # Lower volume
+        bg_music = AudioFileClip(str(music_path)).fx(afx.volumex, 0.3)  # Lower volume
         
         # Combine video with background music
         if final_video.audio:
