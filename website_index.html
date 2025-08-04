@@ -146,3 +146,109 @@
   </footer>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BidyPhone Video Generator Script</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #121212;
+      color: #f0f0f0;
+      padding: 2rem;
+    }
+    pre {
+      background-color: #1e1e1e;
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      white-space: pre-wrap;
+    }
+    h1 {
+      font-family: Arial, sans-serif;
+      color: #ff6b35;
+    }
+    code {
+      color: #e6db74;
+    }
+  </style>
+</head>
+<body>
+  <h1>📽️ BidyPhone Video Generator (Python)</h1>
+  <p>This is the full Python script for generating a cinematic promotional video using MoviePy, product assets, animations, captions, and sound.</p>
+
+  <pre><code>
+# BidyPhone Video Generator
+# Dependencies: pip install moviepy pillow gtts
+
+import os
+from moviepy.editor import (
+    VideoFileClip, AudioFileClip, ImageClip, TextClip,
+    CompositeVideoClip, CompositeAudioClip, concatenate_videoclips,
+    vfx, afx
+)
+from gtts import gTTS
+
+# Define paths
+ASSETS = {
+    "intro": "phone_intro.jpg",
+    "map": "map_unbanked.jpg",
+    "solar": "solar_bitcoin.jpg",
+    "ubi": "ubi_screen.jpg",
+    "cta": "biddyphone_cta.jpg",
+    "music": "background_music.mp3"
+}
+
+OUTPUT = "BidyPhone_Promo.mp4"
+VIDEO_SIZE = (1920, 1080)
+
+def create_scene(image_path, text, voice_text, duration, effect="zoom"):
+    image = ImageClip(image_path).set_duration(duration).resize(VIDEO_SIZE)
+
+    if effect == "zoom":
+        image = image.fx(vfx.resize, lambda t: 1 + 0.03 * t)
+    elif effect == "pan":
+        image = image.set_position(lambda t: ('center', int(30 * t)))
+    elif effect == "rotate":
+        image = image.rotate(lambda t: 5 * t)
+    
+    caption = TextClip(text, fontsize=50, color='white').set_duration(duration).set_position(("center", 900))
+    
+    voice_path = f"voice_{text[:5]}.mp3"
+    gTTS(text=voice_text, lang="en").save(voice_path)
+    voice = AudioFileClip(voice_path).subclip(0, duration)
+    
+    return CompositeVideoClip([image, caption.set_start(0)]).set_duration(duration).set_audio(voice)
+
+def main():
+    print("Generating video...")
+
+    scenes = [
+        create_scene(ASSETS["intro"], "BiddyPhone: Sovereignty in Your Pocket", 
+                     "Introducing BiddyPhone, your gateway to financial independence.", 5),
+        create_scene(ASSETS["map"], "1.4 Billion People Remain Unbanked", 
+                     "One point four billion people around the world remain unbanked.", 5, "pan"),
+        create_scene(ASSETS["solar"], "Solar Mining + Bitcoin Connectivity", 
+                     "BiddyPhone harnesses solar energy and mines Bitcoin off-grid.", 5, "rotate"),
+        create_scene(ASSETS["ubi"], "Universal Basic Income, Powered by Bitcoin", 
+                     "Earn sats daily with our built-in UBI model powered by mining.", 5),
+        create_scene(ASSETS["cta"], "Join the Revolution", 
+                     "Visit BiddyPhone dot com to join the movement.", 5, "zoom"),
+    ]
+
+    video = concatenate_videoclips(scenes, method="compose")
+    
+    if os.path.exists(ASSETS["music"]):
+        music = AudioFileClip(ASSETS["music"]).volumex(0.2)
+        final_audio = CompositeAudioClip([video.audio, music])
+        video = video.set_audio(final_audio)
+
+    video.write_videofile(OUTPUT, fps=24, codec="libx264", audio_codec="aac")
+    print(f"Video saved to {OUTPUT}")
+
+if __name__ == "__main__":
+    main()
+  </code></pre>
+</body>
+</html>
