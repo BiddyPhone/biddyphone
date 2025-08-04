@@ -20,12 +20,11 @@ import os
 import sys
 from pathlib import Path
 import numpy as np
-from moviepy.editor import (
-    VideoFileClip, AudioFileClip, ImageClip, TextClip, CompositeVideoClip,
-    concatenate_videoclips, ColorClip, CompositeAudioClip
+from moviepy import (
+    VideoFileClip, AudioFileClip, ImageClip, TextClip,
+    CompositeVideoClip, concatenate_videoclips,
+    ColorClip, CompositeAudioClip, afx, vfx
 )
-from moviepy.video.fx import resize, fadein, fadeout
-from moviepy.audio.fx import volumex
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 from gtts import gTTS
 import requests
