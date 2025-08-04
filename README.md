@@ -1,5 +1,5 @@
 
-# biddyphone-sim
+# biddyphone
 A solar-powered, Bitcoin-native smartphone for off-grid communities.
 **BiddyPhone** is an open hardware/software initiative to build a mobile device that can:
 - Mine BTC using onboard ASICs
