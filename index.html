@@ -12,6 +12,25 @@
       scroll-behavior: smooth;
     }
   </style>
+<link rel="manifest" href="/manifest.json">
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js')
+        .then(reg => console.log('Service worker registered.'))
+        .catch(err => console.log('SW registration failed:', err));
+    });
+  }
+</script>
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="/icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000000">
 </head>
 <body class="bg-white text-gray-800 font-sans leading-relaxed tracking-wide dark:bg-gray-900">
   <script>AOS.init({ duration: 800, once: true });</script>
@@ -131,7 +150,19 @@
     </div>
   </section>
 
-  <!-- Call to Action -->
+  <!-- Contact Form -->
+<section id="contact" class="px-6 py-20 max-w-6xl mx-auto" data-aos="fade-up">
+  <h2 class="text-3xl font-bold text-blue-700 dark:text-blue-300 mb-6">Contact Us</h2>
+  <form id="contactForm" class="space-y-4">
+    <input type="text" name="name" placeholder="Your Name" required class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded">
+    <input type="email" name="email" placeholder="Your Email" required class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded">
+    <textarea name="message" rows="4" placeholder="Your Message" required class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded"></textarea>
+    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full transition">Send Message</button>
+    <p id="formStatus" class="mt-2 text-sm text-green-500 hidden">Thank you! Message sent.</p>
+  </form>
+</section>
+
+<!-- Call to Action -->
   <section id="join" class="bg-blue-600 text-white text-center px-6 py-20" data-aos="fade-up">
     <div class="flex justify-center mb-6">
       <a href="/downloads/BiddyPhone_Whitepaper.pdf" target="_blank" class="flex items-center gap-2 text-white hover:underline">
@@ -304,5 +335,166 @@
   <a href="/downloads/BiddyPhone_Simulator.apk" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full transition">📱 Download APK</a>
 </section>
 
+<!-- Embedded Mining Simulator -->
+<section id="browser-miner" class="px-6 py-20 max-w-6xl mx-auto bg-gradient-to-br from-gray-950 to-black text-green-400 font-mono text-center shadow-inner" data-aos="zoom-in">
+  <h2 class="text-3xl font-bold mb-4 text-green-300 animate-pulse">⛏️ In-Browser Mining Simulator</h2>
+  <p class="mb-4">Simulate real-time uptime mining, solar input, and mesh sync feedback.</p>
+  <div class="w-full max-w-xl mx-auto bg-green-900 border-2 border-green-400 rounded-xl p-6 shadow-lg">
+    <div class="text-left mb-4">
+      <p class="relative group">
+        🔆 Solar Input: <span id="solar">100%</span>
+        <span class="absolute left-0 mt-1 hidden group-hover:block text-xs bg-gray-800 text-green-300 rounded px-2 py-1 z-10">
+          Represents available power from solar panel input. Must stay above 70% to mine.
+        </span>
+      </p>
+      <p class="relative group">
+        📡 Mesh Sync: <span id="mesh">Connected</span>
+        <span class="absolute left-0 mt-1 hidden group-hover:block text-xs bg-gray-800 text-green-300 rounded px-2 py-1 z-10">
+          Device connectivity to satellite or mesh network. Required to validate blocks.
+        </span>
+      </p>
+    </div>
+    <div class="w-full h-6 bg-green-800 mb-4 rounded overflow-hidden">
+      <div id="progressBar" class="h-full bg-gradient-to-r from-green-300 via-lime-400 to-green-500 rounded transition-all duration-300 ease-in-out" style="width: 0%"></div>
+    </div>
+    <h3 class="text-xl tracking-wider">⚡ Sats Earned: <span id="sats">0</span></h3>
+    <button onclick="startMining()" class="mt-6 bg-green-400 text-black px-6 py-2 rounded-full font-bold hover:bg-green-300 transition">▶️ Start Mining</button>
+  </div>
+  <audio id="mineSound" src="https://freesound.org/data/previews/341/341695_3248244-lq.mp3" preload="auto"></audio>
+  <script>
+    let sats = 0;
+    let progress = 0;
+    let mining = false;
+    const mineSound = document.getElementById("mineSound");
+
+    function startMining() {
+      if (mining) return;
+      mining = true;
+      setInterval(() => {
+        const solar = Math.floor(Math.random() * 41) + 60; // 60–100%
+        const meshConnected = Math.random() > 0.1; // 90% chance connected
+
+        document.getElementById("solar").textContent = solar + "%";
+        document.getElementById("mesh").textContent = meshConnected ? "Connected" : "Disconnected";
+
+        if (meshConnected && solar > 70) {
+          progress = (progress + 1) % 101;
+          sats += Math.floor(solar / 20);
+          document.getElementById("progressBar").style.width = progress + "%";
+          document.getElementById("sats").textContent = sats;
+          updateChart(sats);
+          mineSound.currentTime = 0;
+          mineSound.play();
+        }
+      }, 1000);
+    }, 500);
+    }
+  </script>
+<div class="max-w-6xl mx-auto px-6 pb-20">
+  <canvas id="rewardChart" class="w-full h-64 bg-black rounded-xl p-4"></canvas>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('rewardChart').getContext('2d');
+  const rewardData = [0];
+  const labels = ["Start"];
+  const rewardChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [{
+        label: 'Sats Earned',
+        data: rewardData,
+        fill: true,
+        backgroundColor: 'rgba(34,197,94,0.2)',
+        borderColor: 'rgb(34,197,94)',
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#00ff00' },
+          grid: { color: '#222' }
+        },
+        x: {
+          ticks: { color: '#00ff00' },
+          grid: { color: '#222' }
+        }
+      },
+      plugins: {
+        legend: { labels: { color: '#00ff00' } }
+      }
+    }
+  });
+
+  let timeTick = 1;
+  function updateChart(sats) {
+    rewardData.push(sats);
+    labels.push("T+" + timeTick + "s");
+    rewardChart.update();
+    timeTick++;
+  }
+</script>
+</section>
+<!-- PWA Files for Offline Support -->
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service Worker registered.'))
+        .catch(err => console.error('Service Worker registration failed:', err));
+    });
+  }
+</script>
+<script>
+  async function fetchMiningRewards() {
+    try {
+      const response = await fetch('http://localhost:3001/api/rewards');
+      const data = await response.json();
+      console.log('Real-time mining reward:', data);
+      const rewardDisplay = document.getElementById('live-reward');
+      if (rewardDisplay) rewardDisplay.textContent = `${data.sats} sats`;
+    } catch (err) {
+      console.error('Failed to fetch mining reward:', err);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const liveSection = document.querySelector('#metrics');
+    if (liveSection) {
+      const liveDiv = document.createElement('div');
+      liveDiv.className = 'mt-6 text-center';
+      liveDiv.innerHTML = '<h4 class="text-green-500 text-xl">📡 Live Backend Reward Feed: <span id="live-reward">...</span></h4>';
+      liveSection.appendChild(liveDiv);
+      fetchMiningRewards();
+      setInterval(fetchMiningRewards, 10000);
+    }
+  });
+</script>
+<script>
+  const contactForm = document.getElementById('contactForm');
+  const statusMsg = document.getElementById('formStatus');
+  contactForm?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const formData = new FormData(contactForm);
+    const data = Object.fromEntries(formData.entries());
+    try {
+      const res = await fetch('http://localhost:3001/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (res.ok) {
+        contactForm.reset();
+        statusMsg.classList.remove('hidden');
+      }
+    } catch (err) {
+      console.error('Failed to submit contact form:', err);
+    }
+  });
+</script>
 </body>
 </html>
